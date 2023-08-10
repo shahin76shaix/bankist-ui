@@ -81,19 +81,27 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
-
+    const date = new Date(acc.movementsDates[i]);
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth()}`.padStart(2, 0);
+    const year = date.getFullYear();
+    const hour = `${date.getHours()}`.padStart(2, 0);
+    const minute = `${date.getMinutes()}`.padStart(2, 0);
     const html = `
       <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
-      i + 1
-    } ${type}</div>
+        <div class="movements__type movements__type--${type}">
+        ${i + 1} ${type}
+        </div>
+        <div class="movements__date">${day}/${month}/${year} at ${hour}:${minute}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +150,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -154,15 +162,21 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+///////////////////////////////////////
+//Fake Always Logged In:
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+// day/month/year
+////////////////////////////////////////
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
   e.preventDefault();
-
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
 
   if (currentAccount?.pin === +inputLoginPin.value) {
     // Display UI and message
@@ -244,7 +258,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
@@ -402,4 +416,73 @@ console.log(PI);
 //Wrong cases
 console.log(Number('230000'));
 console.log(Number.parseInt('230_000'));
+*/
+
+/*
+//Working with BigInt:
+console.log(2 ** 53 - 1); //Biggest number as a safe number
+console.log(Number.MAX_SAFE_INTEGER);
+
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2);
+console.log(2 ** 53 + 3);
+
+//BigInt -> Big Integer:
+console.log(572345789203498572394857823123123n);
+console.log(BigInt(572345789203498572394857823123123)); //Not work
+
+//Operations:
+console.log(10000n + 10000n);
+console.log(263476237847823478237847823478237848724782378462378n * BigInt(23));
+
+const huge = 2362736273672637263n;
+const num = 23;
+console.log(huge * BigInt(num));
+
+//Exceptions
+console.log(20n > 15);
+console.log(20n === 20);
+console.log(typeof 20n);
+console.log(20n == 20);
+
+console.log(huge + ' is really big!!!');
+
+//Divisions:
+console.log(10n / 3n);
+*/
+/*
+//Create a date:
+const now = new Date();
+console.log(now);
+
+console.log(new Date('Wed Aug 09 2023 20:53:17'));
+console.log(new Date('December 24, 2015'));
+console.log(new Date(account1.movementsDates[0]));
+
+console.log(new Date(2037, 10, 19, 15, 23, 5));
+console.log(new Date(2037, 10, 31));
+
+console.log(new Date(0));
+console.log(new Date(3 * 24 * 60 * 60 * 1000));
+*/
+
+/*
+//Working with dates:
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(future.getFullYear());
+console.log(future.getMonth());
+console.log(future.getDate());
+console.log(future.getDay());
+console.log(future.getTime());
+console.log(future.getHours());
+console.log(future.toISOString());
+console.log(future.getTime());
+
+console.log(new Date(11142244380000));
+
+console.log(Date.now());
+
+future.setFullYear(2040);
+console.log(future);
 */
