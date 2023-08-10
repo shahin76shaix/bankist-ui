@@ -101,7 +101,9 @@ const displayMovements = function (acc, sort = false) {
         <div class="movements__type movements__type--${type}">
         ${i + 1} ${type}
         </div>
-        <div class="movements__date">${day}/${month}/${year} at ${hour}:${minute}</div>
+        <div class="movements__date">
+        ${day}/${month}/${year} 
+        </div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -174,6 +176,14 @@ containerApp.style.opacity = 100;
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
   e.preventDefault();
+  const now = new Date();
+  const convert = new Intl.DateTimeFormat(currentAccount.locale, {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(now);
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
@@ -184,6 +194,10 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    //Display Date:
+
+    labelDate.textContent = convert;
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -212,6 +226,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    //Dates:
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -225,6 +243,7 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
