@@ -80,6 +80,19 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions
+const formatMovementDate = function (date) {
+  const calcDaysPassed = (date1, date2) =>
+    Math.round(Math.abs((date2 - date1) / (1000 * 60 * 60 * 24)));
+  const dayPassed = calcDaysPassed(new Date(), date);
+  if (dayPassed === 0) return 'Today';
+  if (dayPassed === 1) return 'Yesterday';
+  if (dayPassed <= 7) return `${dayPassed} days ago`;
+
+  const day = `${date.getDate()}`.padStart(2, 0);
+  const month = `${date.getMonth()}`.padStart(2, 0);
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
@@ -91,18 +104,14 @@ const displayMovements = function (acc, sort = false) {
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const date = new Date(acc.movementsDates[i]);
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth()}`.padStart(2, 0);
-    const year = date.getFullYear();
-    const hour = `${date.getHours()}`.padStart(2, 0);
-    const minute = `${date.getMinutes()}`.padStart(2, 0);
+    const displayDates = formatMovementDate(date);
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">
         ${i + 1} ${type}
         </div>
         <div class="movements__date">
-        ${day}/${month}/${year} 
+        ${displayDates}
         </div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
@@ -505,3 +514,14 @@ console.log(Date.now());
 future.setFullYear(2040);
 console.log(future);
 */
+
+//Operations with dates:
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(+future);
+
+const calcDaysPassed = (date1, date2) =>
+  Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
+
+const days1 = calcDaysPassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
+console.log(days1);
