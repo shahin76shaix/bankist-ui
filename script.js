@@ -200,7 +200,7 @@ const startLogOutTimer = function () {
     time--;
   };
   //Set time to 5 minutes
-  let time = 30;
+  let time = 120;
   //call the timer every second
   tick();
   const timer = setInterval(tick, 1000);
