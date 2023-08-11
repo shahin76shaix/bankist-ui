@@ -279,12 +279,15 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
+    function transfer() {
+      // Add movement
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }
+    setTimeout(transfer, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -573,4 +576,33 @@ console.log(
   'Browser: ',
   new Intl.NumberFormat(navigator.language, options).format(num)
 );
+*/
+/*
+//setTimeOut function
+//Asynchrounus JavaScript:
+const ings = ['olives', 'spinach'];
+const orderPizza = setTimeout(
+  (ing1, ing2) =>
+    console.log(`Here is your Pizza with ${ing1} and ${ing2}  🍕`),
+  5000,
+  ...ings
+);
+console.log(`Waiting...`);
+if (ings.includes('spinach')) clearTimeout(orderPizza);
+
+//setInterval:
+// setInterval(function () {
+//   const now = new Date();
+//   console.log(now);
+// }, 1000);
+
+setInterval(function () {
+  const now = new Date();
+  const time = new Intl.DateTimeFormat(navigator.language, {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }).format(now);
+  console.log(time);
+}, 1000);
 */
